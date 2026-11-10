@@ -19,6 +19,7 @@ help("dir.create")
 #-------------------------------------------------------------------------------------------------------------
 
 #Setting the current working directory
+getwd()
 setwd("C:/Users/39339/Desktop/BCG_master_degree/bioinformatics_and_computational_biology/r_bioinfo_esercitazioni")
 
 
@@ -29,21 +30,21 @@ setwd("C:/Users/39339/Desktop/BCG_master_degree/bioinformatics_and_computational
 #Vectors 
 
 x <- c('YES', 'YES', 'NO', 'MAYBE', 'NO')
-is.character(x)
+is.character(x) #no difference between characters and strings
 x
 x_f <- factor(x) #or x_f <- as_factor(x)
 x_f
 is.character(x_f)
-is.factor(x_f)
+is.factor(x_f) 
 length(x) # unary operator
 length(x_f) #always the length of the vector
-levels(x_f)
+levels(x_f) #it returns a character vector
 is.character(levels(x_f))
 
-v <- vector(mode = 'character',length = 10)
+v <- vector(mode = 'character',length = 10) #create an empty vector
 v[1]<-'hi'
 v
-v <- v[-1] 
+v <- v[-1] #"-" elimina l'elemento in posizione che gli dò
 length(v)
 v
 
@@ -59,10 +60,14 @@ v2
 
 #1. Replicate v1 for 5 times, repeating each element twice (2 times)
 ?rep
+v3 <- rep(v1, each = 2, times = 5)
+v3
 #2. Assign a vector with 10 random numbers, normally distributed with mean=5 and standard deviation=2
 ?rnorm
+v4 <- rnorm(n=10, mean=5, sd=2)
+v4
 #3. Extract from the second to the to last but one element of v4
-#?
+v4[2:length(v4)-1]
 
 #Binary operators
 vsum <- v1+v2
@@ -74,29 +79,33 @@ vsum==v2 #example of a logical operator to obtain a predicate
 #control functions
 any(v1 > 2)
 all(v1 > 2)
-ifelse(v1 > 2, 2, 0) 
+ifelse(v1 > 2, 2, 0) #mi dice 2 se vero e 0 se falso
 ifelse(!v1 > 2, 2, 0)
 
 v4 <- c(1,6,4,8,-7,2,3,NA) 
+v4
 #4. Extract v4 values having their square greater than 18 
-
+ifelse(v4**2 > 18, v4, NA)
 
 #5. Extract v4 values having their square greater than 18 excluding NA
 ?subset
+subset(v4, v4**2 > 18)
+
 
 
 #6. return their indexes on v4
 ?which
+which(v4**2 > 18)
 
 
 #7. replace such values with 100 in v4
-
-
+v4[which(v4**2 > 18)] <- 100
+v4
 
 #8. delete from v4 the last 3 elements 
-
-
-
+v5 <- v4[-(length(v4)-2):-length(v4)]
+v5
+v4
 #-------------------------------------------------------------------------------------------------------------
 
 #Matrices
@@ -183,7 +192,7 @@ D['first',] # NOT D$first!
 # Load the tab-delimited metadata.txt file and use indexing and predicates to extract required information
 
 ?read.table
-D <- read.table("metadata.txt", header=T, sep="\t")
+D <- read.table("metadata.txt", header=T, sep="\t") #header = True means that i take the first row as header
 typeof(D)
 D<-data.frame(D)
 str(D)
@@ -191,6 +200,8 @@ head(D)
 
 #11. Example 1
 # Find all the histone modification samples (HM)
+d2 <- D[D$subtype=="HM" & D$lab=="broad", ]
+d2
 # from the Broad Institute
 
 
@@ -199,6 +210,7 @@ head(D)
 #12. Example 2
 # Find all the filenames of samples coming from
 # RAD21 transcription factor in females
+D[D$antibody=="RAD21" & D$sex=="F", "fileName"] #[qua scrivo la condition, qua scrivo cosa estraggo]
 
 
 
