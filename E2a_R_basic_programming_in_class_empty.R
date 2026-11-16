@@ -432,3 +432,140 @@ Z <- data.frame(Z)
 Z
 write.table(Z, file = "result_first_script.txt", quote = FALSE,sep = "\t")
 
+myFname <- function(arg1, arg2, arg3 = default){
+  body
+}
+myFname <- function(arg1, arg2, ...)
+#In R, it is not necessary to include the return
+#statement. When the function call is assigned to
+#another variable, R can automatically return the
+#value of whichever variable x is on the last line
+#of the body of the function; still, return(x) can
+#be used to print x value when it is not assigned
+#to any other variable.
+
+for(i in 1:length(v)){...}
+for(i in v){...}
+while(condition) {...} #the condition is something that can go on forever
+
+# Apply a function to the margins of an array or
+# matrix/numerical data frame returning a vector,
+# array or list of values
+apply(X, APPLY_TO, FUNCTION)
+# X is an array or matrix
+# APPLY_TO is 1 to apply the FUNCTION on rows
+# is 2 to apply the FUNCTION on columns…
+# e.g.:
+apply(M, 2, mean)
+# apply mean to columns of matrix M
+# The apply function is fast and more concise than
+# explicit loops.
+
+# Functions can be defined within apply
+> apply(M, 2, function(x) SINGLE_LINE_BODY)
+# e.g.:
+> k <- 3
+> apply(M, 2, function(x) all(x >= k)) #all mi verifica applica la condition su tutto se x è maggiore di k in ogni column
+# This command returns a Logical vector with TRUE,
+# only for those columns from matrix M having all
+# values greater or equal to the constant k
+
+f2 <- function(arg){
+  res <- arg * 2
+}
+a <- f2(5) #i have it to save somewhere or make return, but it's never done (che cosa stupida)
+a
+#if i.e. i wanna print ciao i can say print ciao e così compare
+
+#Super assignment (utile in R studio, non per i gay come me che usano VSCode)
+k<<-5
+
+
+#Function used to standardize the values of a Matrix X wrt column values
+# The standardized version of X is:
+# Z = (X – M) / S
+# where M is the mean matrix of X and S the standard
+# deviation matrix of X wrt column values.
+# Use apply instead of a cycle. X
+#
+# R functions that could be helpful:
+# MATRIX DIFFERENCE: -
+# MATRIX DIVISION: /
+# MATRIX CROSS-PRODUCT: %*%
+# TRANSPOSE: t(X)
+#matrixes operation works wisely, 1st element of 1st matrix with 1st el of 2nd mat, 2nd with 2nd and so on
+
+#to apply the mean over the column i should do apply(x, 2, mean)
+
+standardizeData <- function(X) {
+  U <- rep(1, nrow(X)) # create vector
+  M <- U %*% t(apply(X, 2, mean)) #matrix moltiplication between a vector and the transposed matrix having two rows and only one column. now number of column of first is equal to number of rows of 2nd
+  S <- U %*% t(apply(X, 2, sd))
+  Z <- (X - M)/S
+return(Z)
+}
+?t #nel dubbio se non ricordo qualcosa scrivo ?comando
+X <- rbind(c(2,9,8,0,5,2),
+           c(3,8,0,1,9,2),
+           c(4,3,6,2,8,3))
+
+
+Z <- standardizeData(X)
+z
+
+
+#how can we compute correlation of gene expression datas?
+
+# Write an R function (first pseudocode) to remove
+# one of the two variables (columns) from an input
+# matrix X with Pearson correlation coefficient
+# greater or equal to a certain threshold value r
+# (e.g. r=1). r=1 means perfect correlation so i can fanculizzare una column che è ridondante
+# Use apply instead of a cycle.
+# R functions that could be helpful:
+# PEARSON CORRELATION: cor(X)
+# UPPER TRIANGULAR: upper.tri(X)
+# MAIN DIAGONAL: diag(X)
+# RETURN A VALUE: return(VAR)
+
+#i.e.
+X <- rbind(c(2,9,8,0,5,2),
+           c(3,8,0,1,9,2),
+           c(4,3,6,2,8,3))
+X           
+cor(X) #it returns the matrix of pearson correlation values
+#what variables should i delete??
+#id discard the main diagonale with 0 values
+#id remove even upper triangle cause the matrix is symmetric
+R <- cor(X)
+R
+diag(R) <- 0
+R
+apply(abs(R), 2, function(x) any(x == 1)) #considero abs perché anche r = -1 è bene toglierlo
+#return columns heaving at least a 1-value
+#so then i can write
+X[, !apply(abs(R), 2, function(x) any(x == 1))]
+
+#it can be usefull in gene analysis, of course this is an example with random numbers
+
+
+# Define functions to handle mature expression data
+#it can be usefull when we are working on a new and strange dataset of for example genes
+removeCorr <- function(X, r=1) {
+R <- cor(X)
+R[upper.tri(R)] <- 0
+diag(R) <- 0
+NEW <- X[, !apply(R, 2, function(x) any(x >= r))]
+return(NEW)
+}
+
+
+standardizeData <- function(X) {
+U <- rep(1, nrow(X))
+M <- U %*% t(apply(X, 2, mean))
+S <- U %*% t(apply(X, 2, sd))
+Z <- (X - M)/S
+return(Z)
+}
+
+#maybe it's a sbatta lavorare su dati di microarray perchéo ora non si usano più, ma alcuni vecchi datasets magari hanno dati raccolti ancora in quel modo lì
